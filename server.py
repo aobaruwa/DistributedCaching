@@ -1,5 +1,5 @@
 import socket 
-
+import sys 
 class Server():
     def __init__(self, port, num_clients=1):
 
@@ -31,7 +31,7 @@ class Server():
                 self.get(client_conn, data[0]) # data like "key"
             elif cmd == "set":
                 self.set(client_conn, data) # data like set ["hello" "world"]
-        client_conn.close()
+        # client_conn.close()
         
     def get(self, client_conn, msg):
         key = msg
@@ -51,6 +51,7 @@ class Server():
         client_conn.send(f"Assigned {value} to {key}".encode())
        
 if __name__=="__main__":
-    s = Server(33333, 1)
+    port_num = int(sys.argv[1])
+    s = Server(port_num, 1)
     s.recieve_messages()
     s.server_socket.close()
