@@ -1,3 +1,4 @@
+import datetime
 import socket
 from client import Client
 from consistency_hashing import ConsistentHashing
@@ -27,7 +28,8 @@ class Client():
         client_socket.connect(server)
         return client_socket
 
-
+    def get_time(self):
+        return datetime.datetime.now().strftime('%H:%M:%S')
 
     def set(self, key, value):
         server = self.ring.get_node(key)
@@ -36,7 +38,9 @@ class Client():
         # if server not in self.connected_servers:
         #     self.client_socket.connect(server)
         #     self.connected_servers.add(server)
-        msg = "set " + str(key) + " " + str(value)
+        curr_time = self.get_time()
+        msg = "set " + str(key) + " " + str(value) + " " + curr_time
+        
         client_socket  = self.client_sockets[server]
         client_socket.send(msg.encode())  # send message
         data = client_socket.recv(1024).decode()  # receive response
@@ -46,12 +50,12 @@ class Client():
     def get(self, key):
         server = self.ring.get_node(key)
         print(f"retrieving data from {server} ...")
-        # client_socket = socket.socket()
-        # if server not in self.connected_servers:
-        #     self.client_socket.connect(server)
-        #     self.connected_servers.add(server)
+
         client_socket = self.client_sockets[server]
         msg = "get " + str(key)
         client_socket.send(msg.encode())  # send message
         data = client_socket.recv(1024).decode()  # receive response
         print('Received from server: ' + data)  # show in terminal
+        #print("connected servers", self.connected_servers)
+
+
