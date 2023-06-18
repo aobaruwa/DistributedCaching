@@ -1,12 +1,11 @@
-"""
-from https://github.com/wasimusu/distcache/blob/master/distcache/consistent_hashing.py
-"""
+
 from bisect import bisect_right, insort
 
 
 class ConsistentHashing:
     """
-    Implements consistent hashing
+    Implements consistent hashing -  
+    thanks : https://github.com/wasimusu/distcache/blob/master/distcache/consistent_hashing.py
     """
 
     def __init__(self, nodes=None, weights=None):
@@ -75,18 +74,3 @@ class ConsistentHashing:
         if position == len(self.ring):
             position = 0
         return self.ring[position][1]
-
-
-if __name__ == '__main__':
-    servers = ['192.168.0.246:11212',
-               '192.168.0.247:11212',
-               '192.168.0.249:11212']
-    weights = [5, 3, 1]
-    ring = ConsistentHashing(servers, weights)
-    server = ring.get_node('my_key')
-    print(server)
-
-    ring.remove_node(server)
-
-    server = ring.get_node('my_key')
-    print(server)
